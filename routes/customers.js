@@ -17,27 +17,45 @@ router.post('/', auth(['admin', 'manager']), async (req, res) => {
 
 // Get all customers
 router.get('/', auth(['admin', 'manager', 'editor']), async (req, res) => {
-  const customers = await Customer.find();
-  res.json(customers);
+  try {
+    const customers = await Customer.find();
+    res.json(customers);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Get single customer
 router.get('/:id', auth(['admin', 'manager', 'editor']), async (req, res) => {
-  const customer = await Customer.findById(req.params.id);
-  if (!customer) return res.status(404).json({ message: 'Not found' });
-  res.json(customer);
+  try {
+    const customer = await Customer.findById(req.params.id);
+    if (!customer) return res.status(404).json({ message: 'Customer not found' });
+    res.json(customer);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Update customer
 router.put('/:id', auth(['admin', 'manager']), async (req, res) => {
-  const customer = await Customer.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(customer);
+  try {
+    const customer = await Customer.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!customer) return res.status(404).json({ message: 'Customer not found' });
+    res.json(customer);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 // Delete customer
 router.delete('/:id', auth(['admin']), async (req, res) => {
-  await Customer.findByIdAndDelete(req.params.id);
-  res.sendStatus(204);
+  try {
+    const customer = await Customer.findByIdAndDelete(req.params.id);
+    if (!customer) return res.status(404).json({ message: 'Customer not found' });
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;

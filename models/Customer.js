@@ -17,7 +17,7 @@ const CustomerSchema = new mongoose.Schema({
     pricePerUnit: Number,
     specialInstruction: String
   },
-  balance: { type: Number, default: 0 }, // positive = prepaid, negative = due
+  balance: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });
 
