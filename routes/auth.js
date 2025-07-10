@@ -24,4 +24,10 @@ router.post('/login', async (req, res) => {
   res.json({ token, username: user.username, role: user.role });
 });
 
+// Dashboard endpoint (open)
+router.get('/dashboard', (req, res) => {
+  res.json({ message: "Dashboard loaded!", status: "success" });
+});
+
 module.exports = router;
+
